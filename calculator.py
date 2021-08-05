@@ -7,9 +7,10 @@ class Calculator:
         self.window = Tk()
         self.window.resizable(0,0)
         self.window.title('Calculator')
+        self.bind_keys()
         self.total = ''
 
-        self.tot_lab = Label(text=self.total, anchor=E,font=('Arial',24))
+        self.tot_lab = Label(text=self.total, anchor=E,font=('Arial',24), bg= '#D8D8D8', height='2')
         self.tot_lab.grid(row=0,column=0,sticky=NSEW,columnspan=4)
 
         self.b0 = Button(
@@ -150,6 +151,19 @@ class Calculator:
         global expression
         self.result = eval(self.total)
         self.tot_lab.config(text=self.result)
+
+    def bind_keys(self):
+        self.window.bind('<Return>', lambda event: self.equate())
+        self.window.bind('<BackSpace>', lambda event: self.num_del())
+
+        for i in range(0,10):
+            self.window.bind(str(i), lambda event,value=i: self.num_update(value))    
+
+        self.window.bind('.', lambda event, value='.': self.num_update('.'))
+        self.window.bind('+', lambda event, value='+': self.num_update('+'))
+        self.window.bind('-', lambda event, value='-': self.num_update('-'))
+        self.window.bind('*', lambda event, value='*': self.num_update('*'))
+        self.window.bind('/', lambda event, value='/': self.num_update('/'))    
 
     def run_calc(self):
         self.window.mainloop()
