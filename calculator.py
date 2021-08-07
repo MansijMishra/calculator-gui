@@ -10,8 +10,9 @@ class Calculator:
         self.bind_keys()
         self.total = ''
         self.expression = ''
+        self.result = ''
 
-        self.tot_expr = Label(text=self.total, anchor=NE,font=('Arial',24), bg= '#D8D8D8')
+        self.tot_expr = Label(text=self.total, anchor=NE,font=('Arial',18), bg= '#D8D8D8', fg='#585858')
         self.tot_expr.grid(row=0,column=0,sticky=NSEW,columnspan=4)
 
         self.current_exp = Label(text=self.expression, anchor=E,font=('Arial',24), bg= '#D8D8D8', height=2)
@@ -130,11 +131,18 @@ class Calculator:
         self.b_divide.grid(row=3,column=3,ipadx=15,ipady=15,sticky=NSEW)
 
         self.b_clear = Button(
-            text = 'CLEAR',
+            text = 'CE',
+            bg = '#DF7401',
+            font = ('Arial', 16),
+            command=self.num_clear)
+        self.b_clear.grid(row=2,column=0,ipadx=15,ipady=15,sticky=NSEW)
+
+        self.b_del = Button(
+            text = 'DEL',
             bg = '#DF7401',
             font = ('Arial', 16),
             command=self.num_del)
-        self.b_clear.grid(row=2,column=0,columnspan=2,ipadx=15,ipady=15,sticky=NSEW)
+        self.b_del.grid(row=2,column=1,ipadx=15,ipady=15,sticky=NSEW)
 
         self.b_square = Button(
             text = '^',
@@ -147,11 +155,15 @@ class Calculator:
         self.expression += str(value) 
         self.current_exp.config(text=self.expression)
 
-    def num_del(self):
+    def num_clear(self):
         self.total = ''
         self.expression = ''
         self.current_exp.config(text=self.expression)
         self.tot_expr.config(text=self.total)
+
+    def num_del(self):
+        self.expression = self.expression.rstrip(self.expression[-1])
+        self.current_exp.config(text=self.expression)
 
     def equate(self):
         global expression
@@ -160,10 +172,7 @@ class Calculator:
         self.tot_expr.config(text=self.expression)
         self.expression = self.result
         self.current_exp.config(text=self.expression)
-
-
-
-
+        
     def bind_keys(self):
         self.window.bind('<Return>', lambda event: self.equate())
         self.window.bind('<BackSpace>', lambda event: self.num_del())
